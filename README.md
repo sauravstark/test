@@ -1,10 +1,15 @@
-# Project Name README
-## Project Details
-Briefly describe your project here.
+# Test Project
 ## Setting up the Database
 To run the database, execute the following Docker command:
 ```
 docker run --name mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=your_database -e MYSQL_USER=your_user -e MYSQL_PASSWORD=your_password -p 3306:3306 -d mysql:8
+```
+## Starting Service
+Run these maven commands to start the service:
+```
+mvn clean
+mvn install
+mvn spring-boot:run
 ```
 ## Populating the Database
 After starting the server, populate the database with initial data using the following CURL commands:
