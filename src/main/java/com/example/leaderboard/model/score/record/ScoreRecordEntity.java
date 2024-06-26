@@ -2,7 +2,14 @@ package com.example.leaderboard.model.score.record;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,18 +21,18 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Table(name = "score_records",
-        indexes = {@Index(name = "idx_gameId_score", columnList = "gameId, score DESC")},
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"gameId", "userId"})}
+        indexes = {@Index(name = "idx_gamename_score", columnList = "gamename, score DESC")},
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"gamename", "username"})}
 )
-public class StoredScoreRecord {
+public class ScoreRecordEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
-    private Long userId;
+    private String username;
     @Column(nullable = false)
-    private Long gameId;
+    private String gamename;
     @Column(nullable = false)
     private Long score;
     private LocalDateTime recordTime;

@@ -16,4 +16,13 @@ public class UserDto {
     private String name;
     private String email;
     private LocalDate dob;
+
+    public static UserDto fromUserEntity(UserEntity userEntity) {
+        return builder()
+                .username(userEntity.getUsername())
+                .name(userEntity.getName())
+                .email(userEntity.getEmail())
+                .dob(userEntity.getDob())
+                .build();
+    }
 }

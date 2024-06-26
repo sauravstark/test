@@ -2,7 +2,6 @@ package com.example.leaderboard.controller;
 
 import java.util.List;
 
-import com.example.leaderboard.model.user.StoredUser;
 import lombok.val;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,21 +30,21 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserDto>> getAllUsers(@RequestParam int page,
                                                      @RequestParam int count) {
-        val userDtoList = userService.getAllUsers(page, count).stream()
-                .map(UserController::userDtoFromStoredUser)
+        val userDtoList = userService.findUsersByPage(page, count).stream()
+                .map(UserDto::fromUserEntity)
                 .toList();
         return ResponseEntity.ok(userDtoList);
     }
 
     @GetMapping("/{username}")
     public ResponseEntity<UserDto> getUserByUsername(@PathVariable String username) {
-        val optionalUserDto = userService.findUser(username).map(UserController::userDtoFromStoredUser);
+        val optionalUserDto = userService.findUserByUsername(username).map(UserDto::fromUserEntity);
         return ResponseEntity.of(optionalUserDto);
     }
 
     @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody CreateUserRequest createUserRequest) {
-        val userDto = userDtoFromStoredUser(userService.createUser(createUserRequest));
+        val userDto = UserDto.fromUserEntity(userService.createUser(createUserRequest));
         return ResponseEntity.ok(userDto);
     }
 
@@ -53,25 +52,16 @@ public class UserController {
     public ResponseEntity<UserDto> updateUser(@PathVariable String username,
                                               @RequestBody UpdateUserRequest updateUserRequest) {
         val optionalUserDto = userService.updateUser(username, updateUserRequest)
-                .map(UserController::userDtoFromStoredUser);
+                .map(UserDto::fromUserEntity);
         return ResponseEntity.of(optionalUserDto);
     }
 
     @DeleteMapping("/{username}")
     public ResponseEntity<Void> deleteUser(@PathVariable String username) {
-        val optionalUserDto = userService.deleteUser(username).map(UserController::userDtoFromStoredUser);
+        val optionalUserDto = userService.deleteUser(username).map(UserDto::fromUserEntity);
         if (optionalUserDto.isPresent()) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
-    }
-
-    private static UserDto userDtoFromStoredUser(StoredUser storedUser) {
-        return UserDto.builder()
-                .username(storedUser.getUsername())
-                .name(storedUser.getName())
-                .email(storedUser.getEmail())
-                .dob(storedUser.getDob())
-                .build();
     }
 }

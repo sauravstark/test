@@ -9,14 +9,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.example.leaderboard.model.score.record.StoredScoreRecord;
+import com.example.leaderboard.model.score.record.ScoreRecordEntity;
 
-public interface ScoreRecordRepository extends JpaRepository<StoredScoreRecord, Long> {
-    Page<StoredScoreRecord> findByDeletedFalse(Pageable pageable);
+public interface ScoreRecordRepository extends JpaRepository<ScoreRecordEntity, Long> {
+    Page<ScoreRecordEntity> findByDeletedFalse(Pageable pageable);
 
-    Optional<StoredScoreRecord> findByGameIdAndUserId(Long gameId, Long userId);
-    Optional<StoredScoreRecord> findByGameIdAndUserIdAndDeletedFalse(Long gameId, Long userId);
+    Optional<ScoreRecordEntity> findByGamenameAndUsername(String gamename, String username);
+    Optional<ScoreRecordEntity> findByGamenameAndUsernameAndDeletedFalse(String gamename, String username);
 
-    @Query("SELECT sr FROM StoredScoreRecord sr WHERE sr.gameId = :gameId AND sr.deleted = false ORDER BY sr.score DESC")
-    List<StoredScoreRecord> findTopScoresByGameId(@Param("gameId") Long gameId, Pageable pageable);
+    @Query("SELECT sr FROM ScoreRecordEntity sr WHERE sr.gamename = :gamename AND sr.deleted = false ORDER BY sr.score DESC")
+    List<ScoreRecordEntity> findTopScoresByGamename(@Param("gamename") String gamename, Pageable pageable);
 }

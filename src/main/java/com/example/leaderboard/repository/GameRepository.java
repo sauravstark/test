@@ -6,9 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.leaderboard.model.game.StoredGame;
+import com.example.leaderboard.model.game.GameEntity;
 
-public interface GameRepository extends JpaRepository<StoredGame, Long> {
-    Page<StoredGame> findByDeletedFalse(Pageable pageable);
-    Optional<StoredGame> findByNameAndDeletedFalse(String name);
+public interface GameRepository extends JpaRepository<GameEntity, Long> {
+    Page<GameEntity> findByDeletedFalse(Pageable pageable);
+    Optional<GameEntity> findByNameAndDeletedFalse(String name);
 }

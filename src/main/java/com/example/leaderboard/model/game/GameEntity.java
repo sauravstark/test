@@ -1,6 +1,5 @@
-package com.example.leaderboard.model.user;
+package com.example.leaderboard.model.game;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -19,18 +18,17 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 @Entity
-@Table(name = "users")
-public class StoredUser {
+@Table(name = "games")
+public class GameEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique=true)
-    private String username;
-
     private String name;
-    private String email;
-    private LocalDate dob;
+
+    private String displayName;
+    private String description;
 
     private LocalDateTime createTime;
     private LocalDateTime updateTime;

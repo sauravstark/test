@@ -13,4 +13,12 @@ public class GameDto {
     private String name;
     private String displayName;
     private String description;
+
+    public static GameDto fromGameEntity(GameEntity gameEntity) {
+        return builder()
+                .name(gameEntity.getName())
+                .displayName(gameEntity.getDisplayName())
+                .description(gameEntity.getDescription())
+                .build();
+    }
 }

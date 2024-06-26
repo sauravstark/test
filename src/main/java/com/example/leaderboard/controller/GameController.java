@@ -2,7 +2,6 @@ package com.example.leaderboard.controller;
 
 import java.util.List;
 
-import com.example.leaderboard.utils.Utils;
 import lombok.val;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,22 +30,22 @@ public class GameController {
     @GetMapping
     public ResponseEntity<List<GameDto>> getAllGames(@RequestParam int page,
                                                      @RequestParam int count) {
-        val gameDtoList = gameService.getAllGames(page, count).stream()
-                .map(Utils::gameDtoFromStoredGame)
+        val gameDtoList = gameService.findGamesByPage(page, count).stream()
+                .map(GameDto::fromGameEntity)
                 .toList();
         return ResponseEntity.ok(gameDtoList);
     }
 
     @GetMapping("/{gamename}")
     public ResponseEntity<GameDto> getGameByName(String gamename) {
-        val optionalGameDto = gameService.findGame(gamename)
-                .map(Utils::gameDtoFromStoredGame);
+        val optionalGameDto = gameService.findGameByName(gamename)
+                .map(GameDto::fromGameEntity);
         return ResponseEntity.of(optionalGameDto);
     }
 
     @PostMapping
     public ResponseEntity<GameDto> createGame(@RequestBody CreateGameRequest createGameRequest) {
-        val gameDto = Utils.gameDtoFromStoredGame(gameService.createGame(createGameRequest));
+        val gameDto = GameDto.fromGameEntity(gameService.createGame(createGameRequest));
         return ResponseEntity.ok(gameDto);
     }
 
@@ -54,14 +53,14 @@ public class GameController {
     public ResponseEntity<GameDto> updateGame(@PathVariable String gamename,
                                               @RequestBody UpdateGameRequest updateGameRequest) {
         val optionalGameDto = gameService.updateGame(gamename, updateGameRequest)
-                .map(Utils::gameDtoFromStoredGame);
+                .map(GameDto::fromGameEntity);
         return ResponseEntity.of(optionalGameDto);
     }
 
     @DeleteMapping("/{gamename}")
     public ResponseEntity<Void> deleteGame(@PathVariable String gamename) {
-        val optionalStoredGame = gameService.deleteGame(gamename);
-        if (optionalStoredGame.isPresent()) {
+        val optionalGameEntity = gameService.deleteGame(gamename);
+        if (optionalGameEntity.isPresent()) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
