@@ -3,6 +3,18 @@
 To run the database, execute the following Docker command:
 ```
 docker run --name mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=your_database -e MYSQL_USER=your_user -e MYSQL_PASSWORD=your_password -p 3306:3306 -d mysql:8
+
+docker run -d --name zookeeper -p 2181:2181 \
+  -e ALLOW_ANONYMOUS_LOGIN=yes \
+  bitnami/zookeeper:latest
+
+docker run -d --name kafka -p 9092:9092 \
+  -e KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181 \
+  -e KAFKA_CFG_LISTENERS=PLAINTEXT://:9092 \
+  -e KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://localhost:9092 \
+  --link zookeeper:zookeeper \
+  bitnami/kafka:latest
+
 ```
 ## Starting Service
 Run these maven commands to start the service:
